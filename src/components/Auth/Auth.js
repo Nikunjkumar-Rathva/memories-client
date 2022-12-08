@@ -6,7 +6,7 @@ import {
   Paper,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
@@ -17,7 +17,7 @@ import Icon from "./icon";
 import { gapi } from "gapi-script";
 import { useDispatch } from "react-redux";
 
-import { redirect } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Auth = () => {
   // Error Solved
@@ -37,6 +37,9 @@ const Auth = () => {
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const Navigate = useNavigate();
+  const Location = useLocation();
 
   const handleChange = () => {};
 
@@ -58,6 +61,8 @@ const Auth = () => {
 
     try {
       dispatch({ type: "AUTH", data: { result, token } });
+
+      Navigate("/");
     } catch (error) {
       console.log(error);
     }

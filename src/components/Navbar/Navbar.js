@@ -4,17 +4,34 @@ import React, { useEffect, useState } from "react";
 import useStyles from "./styles";
 
 import memories from "../../images/memories.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
   const classes = useStyles();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
+  const Navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const Location = useLocation();
+
+  const logout = () => {
+    dispatch({
+      type: "LOGOUT",
+    });
+
+    Navigate("/auth");
+
+    setUser(null);
+  };
+
   useEffect(() => {
     const token = user?.token;
 
     setUser(JSON.parse(localStorage.getItem("profile")));
-  }, []);
+  }, [Location]);
 
   return (
     <>
@@ -50,9 +67,10 @@ const Navbar = () => {
                 {user.result.name}
               </Typography>
               <Button
-                varient="contained"
+                variant="contained"
                 className={classes.logout}
                 color="secondary"
+                onClick={logout}
               >
                 Logout
               </Button>
