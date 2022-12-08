@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import useStyles from "./styles";
 
@@ -8,7 +8,13 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const classes = useStyles();
-  const user = null;
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+  useEffect(() => {
+    const token = user?.token;
+
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, []);
 
   return (
     <>

@@ -17,6 +17,8 @@ import Icon from "./icon";
 import { gapi } from "gapi-script";
 import { useDispatch } from "react-redux";
 
+import { redirect } from "react-router";
+
 const Auth = () => {
   // Error Solved
   // Link : https://stackoverflow.com/questions/48683320/google-sso-login-error-popup-closed-by-user
