@@ -6,7 +6,7 @@ import {
   Paper,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
@@ -17,7 +17,16 @@ import Icon from "./icon";
 import { gapi } from "gapi-script";
 import { useDispatch } from "react-redux";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { signIn, signUp } from "../../store/actions/auth";
+
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const Auth = () => {
   // Error Solved
@@ -34,16 +43,27 @@ const Auth = () => {
   const classes = useStyles();
   const [isSignUp, setIsSignUp] = useState(false);
 
+  const [formData, setFormData] = useState(initialValues);
+
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const Navigate = useNavigate();
-  const Location = useLocation();
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignUp) {
+      dispatch(signUp(formData, Navigate));
+    } else {
+      dispatch(signIn(formData, Navigate));
+    }
+  };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -51,11 +71,10 @@ const Auth = () => {
 
   const switchMode = () => {
     setIsSignUp(!isSignUp);
-    handleShowPassword(false);
+    setShowPassword(false);
   };
 
   const googleSuccess = async (res) => {
-    console.log(res);
     const result = res?.profileObj;
     const token = res?.tokenId;
 
@@ -86,14 +105,14 @@ const Auth = () => {
               <>
                 <Input
                   name="firstName"
-                  label="first Name"
+                  label="First Name"
                   handleChange={handleChange}
                   autoFocus
                   half
                 />
                 <Input
-                  name="firstName"
-                  label="first Name"
+                  name="lastName"
+                  label="Last Name"
                   handleChange={handleChange}
                   half
                 />
@@ -138,7 +157,7 @@ const Auth = () => {
               return (
                 <Button
                   className={classes.googleButton}
-                  color="primary"
+                  color="secondary"
                   fullWidth
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}

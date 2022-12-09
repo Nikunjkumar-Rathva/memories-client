@@ -12,10 +12,8 @@ const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
   const Navigate = useNavigate();
-
-  const dispatch = useDispatch();
-
   const Location = useLocation();
+  const dispatch = useDispatch();
 
   const logout = () => {
     dispatch({
@@ -28,10 +26,8 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const token = user?.token;
-
     setUser(JSON.parse(localStorage.getItem("profile")));
-  }, [Location]);
+  }, [Location, dispatch]);
 
   return (
     <>
@@ -58,13 +54,13 @@ const Navbar = () => {
             <div className={classes.profile}>
               <Avatar
                 className={classes.purple}
-                alt={user.result.name}
-                src={user.result.imageUrl}
+                alt={user?.result?.name}
+                src={user?.result?.imageUrl}
               >
-                {user.result.name.charAt(0)}
+                {user?.result?.name.charAt(0)}
               </Avatar>
               <Typography className={classes.userName} varient="h6">
-                {user.result.name}
+                {user?.result?.name}
               </Typography>
               <Button
                 variant="contained"
