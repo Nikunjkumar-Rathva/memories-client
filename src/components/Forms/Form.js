@@ -10,7 +10,6 @@ import { createPost, updatePost } from "../../store/actions";
 const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
@@ -20,6 +19,8 @@ const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
     currentId ? state.posts.find((p) => p._id === currentId) : null
   );
+
+  const user = JSON.parse(localStorage.getItem("profile"));
 
   const dispatch = useDispatch();
 
@@ -31,9 +32,11 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId) {
-      dispatch(updatePost(currentId, postData));
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
     } else {
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
     }
 
     clear();
@@ -43,13 +46,22 @@ const Form = ({ currentId, setCurrentId }) => {
     setCurrentId(null);
 
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
     });
   };
+
+  if (!user) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please Sign In To Like Memory And Create New Memory !!!
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -62,7 +74,7 @@ const Form = ({ currentId, setCurrentId }) => {
         <Typography variant="h6">
           {currentId ? "Updating" : "Creating"} a Memory
         </Typography>
-        <TextField
+        {/* <TextField
           name="creator"
           variant="outlined"
           label="Creator"
@@ -71,7 +83,7 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(e) => {
             setPostData({ ...postData, creator: e.target.value });
           }}
-        />
+        /> */}
 
         <TextField
           name="title"

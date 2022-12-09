@@ -2,6 +2,17 @@ import axios from "axios";
 
 const API = axios.create({ baseURL: "http://localhost:8080" });
 
+API.interceptors.request.use((req) => {
+  if (localStorage.getItem("profile")) {
+    const user = JSON.parse(localStorage.getItem("profile"));
+    const token = user?.token;
+
+    req.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return req;
+});
+
 export const fetchPosts = () => {
   return API.get("/posts");
 };
