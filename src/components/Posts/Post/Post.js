@@ -16,11 +16,7 @@ import useStyles from "./styles";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../../../store/actions";
-import {
-  ThumbDownAltOutlined,
-  ThumbUpAlt,
-  ThumbUpAltOutlined,
-} from "@material-ui/icons";
+import { ThumbUpAltOutlined } from "@material-ui/icons";
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();

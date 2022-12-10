@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import useStyles from "./styles";
 
@@ -17,15 +17,15 @@ const Navbar = () => {
   const Location = useLocation();
   const dispatch = useDispatch();
 
-  const logout = () => {
+  const logout = useCallback(() => {
     dispatch({
       type: "LOGOUT",
     });
 
-    Navigate("/");
+    Navigate("/auth");
 
     setUser(null);
-  };
+  }, [Navigate, dispatch]);
 
   useEffect(() => {
     const token = user?.token;
@@ -39,7 +39,7 @@ const Navbar = () => {
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
-  }, [Location, dispatch]);
+  }, [user?.token, logout, Location, dispatch]);
 
   return (
     <>
