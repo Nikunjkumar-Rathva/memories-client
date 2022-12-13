@@ -17,15 +17,15 @@ export const signIn = (formData, Navigate) => async (dispatch) => {
 
 export const signUp = (formData, Navigate) => async (dispatch) => {
   try {
-    console.log(formData);
-
     const { data } = await api.signUp(formData);
 
-    dispatch({ type: AUTH, data });
-
-    // setIsSignUp(false);
-
-    Navigate("/");
+    if (data?.success) {
+      // dispatch({ type: AUTH, data });
+      cogoToast.success(data?.message);
+      Navigate("/auth/signIn");
+    } else {
+      cogoToast.error(data?.message);
+    }
   } catch (error) {
     console.log(error);
     cogoToast.error(error?.response?.data?.message);

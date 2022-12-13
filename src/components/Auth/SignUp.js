@@ -28,7 +28,7 @@ const initialValues = {
   confirmPassword: "",
 };
 
-const Auth = () => {
+const SignUp = () => {
   // Error Solved
   // Link : https://stackoverflow.com/questions/48683320/google-sso-login-error-popup-closed-by-user
 
@@ -58,7 +58,7 @@ const Auth = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (isSignUp) {
+    if (true) {
       dispatch(signUp(formData, Navigate));
     } else {
       dispatch(signIn(formData, Navigate));
@@ -98,16 +98,16 @@ const Auth = () => {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography variant="h5">{isSignUp ? "Sign Up" : "Sign In"}</Typography>
+        <Typography variant="h5">{true ? "Sign Up" : "Sign In"}</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            {isSignUp && (
+            {true && (
               <>
                 <Input
                   name="firstName"
                   label="First Name"
                   handleChange={handleChange}
-                  autoFocus
+                  //   autoFocus
                   half
                 />
                 <Input
@@ -131,7 +131,7 @@ const Auth = () => {
               type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
             />
-            {isSignUp && (
+            {true && (
               <Input
                 name="confirmPassword"
                 label="Confirm Password"
@@ -148,44 +148,48 @@ const Auth = () => {
             color="primary"
             className={classes.submit}
           >
-            {isSignUp ? "Sign Up" : "Sign In"}
+            {true ? "Sign Up" : "Sign In"}
           </Button>
 
-          <GoogleLogin
-            clientId="663505786513-7rfiij6gqn57rm9q9p05s7bruq0t3hv6.apps.googleusercontent.com"
-            render={(renderProps) => {
-              return (
-                <Button
-                  className={classes.googleButton}
-                  color="secondary"
-                  fullWidth
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                  startIcon={<Icon />}
-                  variant="contained"
-                >
-                  Google Sign In
-                </Button>
-              );
-            }}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy="single_host_origin"
-          />
+          {!true && (
+            <GoogleLogin
+              clientId="663505786513-7rfiij6gqn57rm9q9p05s7bruq0t3hv6.apps.googleusercontent.com"
+              render={(renderProps) => {
+                return (
+                  <Button
+                    className={classes.googleButton}
+                    color="secondary"
+                    fullWidth
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    startIcon={<Icon />}
+                    variant="contained"
+                  >
+                    Google Sign Up
+                  </Button>
+                );
+              }}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy="single_host_origin"
+            />
+          )}
 
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Button onClick={switchMode}>
-                {isSignUp
-                  ? "Already have an account? Sign In"
-                  : "Don't have account? Sign Up"}
-              </Button>
+          {!true && (
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Button onClick={switchMode}>
+                  {isSignUp
+                    ? "Already have an account? Sign In"
+                    : "Don't have account? Sign Up"}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </form>
       </Paper>
     </Container>
   );
 };
 
-export default Auth;
+export default SignUp;

@@ -8,6 +8,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import decode from "jwt-decode";
+import cogoToast from "cogo-toast";
 
 const Navbar = () => {
   const classes = useStyles();
@@ -17,12 +18,18 @@ const Navbar = () => {
   const Location = useLocation();
   const dispatch = useDispatch();
 
+  const changePassword = () => {
+    Navigate("/changePassword");
+  };
+
   const logout = useCallback(() => {
     dispatch({
       type: "LOGOUT",
     });
 
-    Navigate("/auth");
+    cogoToast.success("Logout Successfull :)");
+
+    Navigate("/auth/signIn");
 
     setUser(null);
   }, [Navigate, dispatch]);
@@ -74,6 +81,20 @@ const Navbar = () => {
               <Typography className={classes.userName} varient="h6">
                 {user?.result?.name}
               </Typography>
+
+              {true && (
+                <>
+                  <Button
+                    variant="contained"
+                    className={classes.changePassword}
+                    color="primary"
+                    onClick={changePassword}
+                  >
+                    <Typography>Change Password</Typography>
+                  </Button>
+                </>
+              )}
+
               <Button
                 variant="contained"
                 className={classes.logout}
@@ -87,11 +108,20 @@ const Navbar = () => {
             <div>
               <Button
                 component={Link}
-                to="/auth"
+                to="/auth/signIn"
                 variant="contained"
                 color="primary"
               >
                 Sign In
+              </Button>
+              <Button
+                style={{ marginLeft: "10px" }}
+                component={Link}
+                to="/auth/signUp"
+                variant="contained"
+                color="primary"
+              >
+                Sign Up
               </Button>
             </div>
           )}

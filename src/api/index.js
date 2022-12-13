@@ -40,3 +40,7 @@ export const signIn = (formData) => {
 export const signUp = (formData) => {
   return API.post("/user/signUp", formData);
 };
+
+export const changePassword = (formData) => {
+  return API.post("/user/changePassword", formData);
+};

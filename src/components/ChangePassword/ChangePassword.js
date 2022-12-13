@@ -9,36 +9,27 @@ import {
 import React, { useEffect, useState } from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
-import Input from "./Input";
+import Input from "../Auth/Input";
 import GoogleLogin from "react-google-login";
 
-import Icon from "./icon";
+import Icon from "../Auth/icon";
 
 import { gapi } from "gapi-script";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../../store/actions/auth";
+import { PasswordChange } from "../../store/actions/changePassword";
 
 const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
+  oldPassword: "",
+  newPassword: "",
   confirmPassword: "",
 };
 
-const Auth = () => {
-  // Error Solved
-  // Link : https://stackoverflow.com/questions/48683320/google-sso-login-error-popup-closed-by-user
-
-  gapi.load("client:auth2", () => {
-    gapi.client.init({
-      clientId:
-        "663505786513-7rfiij6gqn57rm9q9p05s7bruq0t3hv6.apps.googleusercontent.com",
-      plugin_name: "chat",
-    });
-  });
+const ChangePassword = () => {
+  //const user = useSelector((state) => state.auth.authData);
+  //console.log(user);
 
   const classes = useStyles();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -58,11 +49,13 @@ const Auth = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (isSignUp) {
-      dispatch(signUp(formData, Navigate));
-    } else {
-      dispatch(signIn(formData, Navigate));
-    }
+    dispatch(PasswordChange(formData));
+
+    // if (isSignUp) {
+    //   dispatch(signUp(formData, Navigate));
+    // } else {
+    //   dispatch(signIn(formData, Navigate));
+    // }
   };
 
   const handleShowPassword = () => {
@@ -98,10 +91,12 @@ const Auth = () => {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography variant="h5">{isSignUp ? "Sign Up" : "Sign In"}</Typography>
+        <Typography variant="h5">
+          {true ? "Change Password" : "Sign In"}
+        </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            {isSignUp && (
+            {!true && (
               <>
                 <Input
                   name="firstName"
@@ -118,23 +113,32 @@ const Auth = () => {
                 />
               </>
             )}
+            {!true && (
+              <Input
+                name="email"
+                label="Email"
+                handleChange={handleChange}
+                type="email"
+              />
+            )}
+
             <Input
-              name="email"
-              label="Email"
-              handleChange={handleChange}
-              type="email"
-            />
-            <Input
-              name="password"
-              label="Password"
+              name="oldPassword"
+              label="Old Password"
               handleChange={handleChange}
               type={showPassword ? "text" : "password"}
-              handleShowPassword={handleShowPassword}
             />
-            {isSignUp && (
+
+            <Input
+              name="newPassword"
+              label="New Password"
+              handleChange={handleChange}
+              type={showPassword ? "text" : "password"}
+            />
+            {true && (
               <Input
                 name="confirmPassword"
-                label="Confirm Password"
+                label="Confirm New Password"
                 handleChange={handleChange}
                 type="password"
               />
@@ -151,41 +155,45 @@ const Auth = () => {
             {isSignUp ? "Sign Up" : "Sign In"}
           </Button>
 
-          <GoogleLogin
-            clientId="663505786513-7rfiij6gqn57rm9q9p05s7bruq0t3hv6.apps.googleusercontent.com"
-            render={(renderProps) => {
-              return (
-                <Button
-                  className={classes.googleButton}
-                  color="secondary"
-                  fullWidth
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                  startIcon={<Icon />}
-                  variant="contained"
-                >
-                  Google Sign In
-                </Button>
-              );
-            }}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy="single_host_origin"
-          />
+          {!true && (
+            <GoogleLogin
+              clientId="663505786513-7rfiij6gqn57rm9q9p05s7bruq0t3hv6.apps.googleusercontent.com"
+              render={(renderProps) => {
+                return (
+                  <Button
+                    className={classes.googleButton}
+                    color="secondary"
+                    fullWidth
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    startIcon={<Icon />}
+                    variant="contained"
+                  >
+                    Google Sign In
+                  </Button>
+                );
+              }}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy="single_host_origin"
+            />
+          )}
 
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Button onClick={switchMode}>
-                {isSignUp
-                  ? "Already have an account? Sign In"
-                  : "Don't have account? Sign Up"}
-              </Button>
+          {!true && (
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Button onClick={switchMode}>
+                  {isSignUp
+                    ? "Already have an account? Sign In"
+                    : "Don't have account? Sign Up"}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </form>
       </Paper>
     </Container>
   );
 };
 
-export default Auth;
+export default ChangePassword;
